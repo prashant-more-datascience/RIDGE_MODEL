@@ -2,7 +2,6 @@ import streamlit as st
 import pickle
 import numpy as np
 import requests
-from sklearn.preprocessing import StandardScaler
 import plotly.graph_objects as go
 import plotly.express as px
 
