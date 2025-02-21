@@ -75,31 +75,21 @@ Suggest optimized values for these attributes to improve fuel efficiency.
     else:
         return f"Error: {response.status_code} - {response.text}"
 
-
-# Set background image with animation
-def set_bg_from_url(image_url):
-    bg_css = f"""
-    <style>
-    .stApp {{
-        background-image: url("{image_url}");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }}
-    </style>
-    """
-    st.markdown(bg_css, unsafe_allow_html=True)
-    # Custom CSS for fonts and colors
 def set_custom_css():
     custom_css = """
     <style>
-        /* Set global font to Times New Roman and color to off-white */
+        /* Set global font to Times New Roman and text color to off-white */
         html, body, [class*="st-"] {
             font-family: "Times New Roman", serif;
             color: #f8f8ff;
         }
-        
-        /* Title & headers */
+
+        /* Background Styling */
+        .stApp {
+            background-color: #2b2b2b; /* Dark background */
+        }
+
+        /* Titles & Headers */
         .stTitle, .stHeader {
             font-size: 28px;
             font-weight: bold;
@@ -151,6 +141,20 @@ set_custom_css()
 
 
 
+# Set background image with animation
+def set_bg_from_url(image_url):
+    bg_css = f"""
+    <style>
+    .stApp {{
+        background-image: url("{image_url}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }}
+    </style>
+    """
+    st.markdown(bg_css, unsafe_allow_html=True)
+    # Custom CSS for fonts and colors
 
 # Set animated background (Replace with your car image URL)
 car_image_url = "https://i.pinimg.com/736x/d9/4a/64/d94a643f26453333ad4354daad504b9c.jpg"  # Example URL
