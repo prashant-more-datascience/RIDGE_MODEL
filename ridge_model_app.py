@@ -89,6 +89,67 @@ def set_bg_from_url(image_url):
     </style>
     """
     st.markdown(bg_css, unsafe_allow_html=True)
+    # Custom CSS for fonts and colors
+def set_custom_css():
+    custom_css = """
+    <style>
+        /* Set global font to Times New Roman and color to off-white */
+        html, body, [class*="st-"] {
+            font-family: "Times New Roman", serif;
+            color: #f8f8ff;
+        }
+        
+        /* Title & headers */
+        .stTitle, .stHeader {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f8f8ff;
+        }
+
+        /* Streamlit widget labels */
+        label {
+            font-size: 18px;
+            color: #f8f8ff;
+        }
+
+        /* Buttons */
+        .stButton>button {
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #4a4a4a;
+            color: #f8f8ff;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        /* Inputs & Sliders */
+        .stNumberInput, .stSlider {
+            color: #f8f8ff;
+        }
+
+        /* Background for text boxes */
+        .stTextArea, .stTextInput {
+            background-color: #333;
+            color: #f8f8ff;
+        }
+
+        /* Sidebar Styling */
+        .stSidebar {
+            background-color: #222;
+        }
+        
+        /* Modify Gauge Chart Text */
+        .gauge-text {
+            color: #f8f8ff !important;
+        }
+    </style>
+    """
+    st.markdown(custom_css, unsafe_allow_html=True)
+
+# Call function to apply custom styling
+set_custom_css()
+
+
 
 
 # Set animated background (Replace with your car image URL)
