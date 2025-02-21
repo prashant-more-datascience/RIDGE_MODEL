@@ -75,6 +75,8 @@ Suggest optimized values for these attributes to improve fuel efficiency.
     else:
         return f"Error: {response.status_code} - {response.text}"
 
+
+# Custom CSS for fonts, colors, and stylish input fields
 def set_custom_css():
     custom_css = """
     <style>
@@ -110,24 +112,37 @@ def set_custom_css():
             color: #f8f8ff;
             border-radius: 8px;
             padding: 10px 20px;
+            transition: 0.3s ease-in-out;
+        }
+        .stButton>button:hover {
+            background-color: #6a6a6a;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
         }
 
-        /* Inputs & Sliders */
-        .stNumberInput, .stSlider {
-            color: #f8f8ff;
+        /* Input Fields - Black Background with Smooth Borders */
+        input, textarea, select {
+            background-color: black !important;
+            color: #f8f8ff !important;
+            border: 2px solid #666 !important;
+            font-family: "Times New Roman", serif;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
         }
 
-        /* Background for text boxes */
-        .stTextArea, .stTextInput {
-            background-color: #333;
-            color: #f8f8ff;
+        /* Glow Effect on Focus */
+        input:focus, textarea:focus, select:focus {
+            border-color: #ffcc00 !important;
+            box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.6);
+            outline: none;
         }
 
         /* Sidebar Styling */
         .stSidebar {
             background-color: #222;
         }
-        
+
         /* Modify Gauge Chart Text */
         .gauge-text {
             color: #f8f8ff !important;
@@ -138,7 +153,6 @@ def set_custom_css():
 
 # Call function to apply custom styling
 set_custom_css()
-
 
 
 # Set background image with animation
