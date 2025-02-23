@@ -304,8 +304,7 @@ with chart_placeholder.container():
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
     st.markdown("</div>", unsafe_allow_html=True)
-
-
+        
 st.subheader("💬 AI Car Expert Chatbot")
 st.write("Ask me anything about cars, engines, fuel efficiency, and maintenance!")
 
