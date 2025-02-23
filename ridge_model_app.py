@@ -249,7 +249,7 @@ acceleration = st.number_input("Acceleration (0-60 mph in sec)")
 displacement = st.number_input("Displacement", min_value=0.0, format="%.2f")
 weight = st.number_input("Weight", min_value=0.0, format="%.2f")
 horsepower = st.number_input("Horsepower", min_value=0.0, format="%.2f")
-cylinders = st.slider("Cylinders", 2, 12, 6)
+cylinders = st.slider("Cylinders", 2, 8, 6)
 
 
 # Predict Button
