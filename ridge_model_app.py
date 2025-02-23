@@ -133,7 +133,7 @@ def chat_with_bot(user_input):
         if response.status_code == 200
         else f"Error: {response.status_code} - {response.text}"
     )
-
+# Function to create a Static Gauge Chart
 def create_gauge_chart(mpg_value):
     fig = go.Figure(
         go.Indicator(
@@ -156,12 +156,12 @@ def create_gauge_chart(mpg_value):
         )
     )
     fig.update_layout(
-        transition=dict(duration=500),  # Smooth animation
         paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
         font=dict(color="white"),
         template="plotly_dark",
     )
     return fig
+
 
 # Custom CSS for fonts, colors, and stylish input fields
 def set_custom_css():
@@ -303,22 +303,12 @@ if st.button("Predict MPG & Get Suggestions"):
     st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
 
      
-    # Animate the Gauge Chart smoothly from 0 to predicted MPG
-    for i, value in enumerate(
-        np.linspace(0, mpg_prediction, num=30)
-    ):  # Smooth transition
-        chart_placeholder.empty()  # Clear previous chart to prevent duplicate IDs
-        chart_placeholder.plotly_chart(
-            create_gauge_chart(value), use_container_width=True, key=f"gauge_{i}"
-        )
         time.sleep(0.05)  # Delay for smooth effect
 
     # Display Final Gauge Chart
-    chart_placeholder.empty()  # Clear animation steps
-    chart_placeholder.plotly_chart(
+   chart_placeholder.plotly_chart(
         create_gauge_chart(mpg_prediction), use_container_width=True, key="gauge_final"
     )
-
 
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
