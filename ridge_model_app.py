@@ -245,8 +245,6 @@ weight = st.number_input("Weight", min_value=0.0, format="%.2f")
 horsepower = st.number_input("Horsepower", min_value=0.0, format="%.2f")
 cylinders = st.slider("Cylinders", 2, 12, 6)
 
-# Placeholder for Gauge Chart
-chart_placeholder = st.empty()
 
 # Predict Button
 if st.button("Predict MPG & Get Suggestions"):
@@ -274,35 +272,34 @@ if st.button("Predict MPG & Get Suggestions"):
     st.subheader("🔍 Prediction Results")
     st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
 
-
-    fig = go.Figure(
-        go.Indicator(
-            mode="gauge+number",
-            value=mpg_prediction,
-            title={"text": "Miles Per Gallon (MPG)", "font": {"size": 24}},
-            gauge={
-                "axis": {"range": [0, 50], "tickwidth": 1, "tickcolor": "white"},
-                "bar": {"color": "purple"},
-                "steps": [
-                    {"range": [0, 15], "color": "#ff4d4d"},
-                    {"range": [15, 30], "color": "#ffd633"},
-                    {"range": [30, 50], "color": "#33cc33"},
-                ],
-                "bgcolor": "rgba(0,0,0,0)",
-                "borderwidth": 2,
-                "bordercolor": "gray",
-            },
-            number={"font": {"size": 40}},
+with chart_placeholder.container():
+        st.subheader("📊 Predicted Fuel Efficiency (Gauge Chart)")
+        fig = go.Figure(
+            go.Indicator(
+                mode="gauge+number",
+                value=mpg_prediction,
+                title={"text": "Miles Per Gallon (MPG)"},
+                gauge={
+                    "axis": {"range": [0, 50]},
+                    "bar": {"color": "purple"},
+                    "steps": [
+                        {"range": [0, 15], "color": "#ff4d4d"},
+                        {"range": [15, 30], "color": "#ffd633"},
+                        {"range": [30, 50], "color": "#33cc33"},
+                    ],
+                    "bgcolor": "rgba(0,0,0,0)",
+                    "borderwidth": 2,
+                    "bordercolor": "gray",
+                },
+            )
         )
-    )
-    fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
-        font=dict(color="white"),
-        template="plotly_dark",
-    )
-
-     # Display the Chart
-    chart_placeholder.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(
+            transition_duration=500,
+            paper_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="white"),
+            template="plotly_dark",
+        )
+        st.plotly_chart(fig)
 
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
