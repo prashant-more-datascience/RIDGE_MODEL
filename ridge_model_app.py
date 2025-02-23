@@ -302,9 +302,6 @@ if st.button("Predict MPG & Get Suggestions"):
     st.subheader("🔍 Prediction Results")
     st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
 
-     
-        time.sleep(0.05)  # Delay for smooth effect
-
     # Display Final Gauge Chart
    chart_placeholder.plotly_chart(
         create_gauge_chart(mpg_prediction), use_container_width=True, key="gauge_final"
