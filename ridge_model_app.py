@@ -133,34 +133,6 @@ def chat_with_bot(user_input):
         if response.status_code == 200
         else f"Error: {response.status_code} - {response.text}"
     )
-# Function to create a Static Gauge Chart
-def create_gauge_chart(mpg_value):
-    fig = go.Figure(
-        go.Indicator(
-            mode="gauge+number",
-            value=mpg_value,
-            title={"text": "Miles Per Gallon (MPG)", "font": {"size": 24}},
-            gauge={
-                "axis": {"range": [0, 50], "tickwidth": 1, "tickcolor": "white"},
-                "bar": {"color": "purple"},
-                "steps": [
-                    {"range": [0, 15], "color": "#ff4d4d"},
-                    {"range": [15, 30], "color": "#ffd633"},
-                    {"range": [30, 50], "color": "#33cc33"},
-                ],
-                "bgcolor": "rgba(0,0,0,0)",
-                "borderwidth": 2,
-                "bordercolor": "gray",
-            },
-            number={"font": {"size": 40}},
-        )
-    )
-    fig.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
-        font=dict(color="white"),
-        template="plotly_dark",
-    )
-    return fig
 
 
 # Custom CSS for fonts, colors, and stylish input fields
@@ -302,10 +274,35 @@ if st.button("Predict MPG & Get Suggestions"):
     st.subheader("🔍 Prediction Results")
     st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
 
-    # Display Final Gauge Chart
-   chart_placeholder.plotly_chart(
-        create_gauge_chart(mpg_prediction), use_container_width=True, key="gauge_final"
+
+    fig = go.Figure(
+        go.Indicator(
+            mode="gauge+number",
+            value=mpg_prediction,
+            title={"text": "Miles Per Gallon (MPG)", "font": {"size": 24}},
+            gauge={
+                "axis": {"range": [0, 50], "tickwidth": 1, "tickcolor": "white"},
+                "bar": {"color": "purple"},
+                "steps": [
+                    {"range": [0, 15], "color": "#ff4d4d"},
+                    {"range": [15, 30], "color": "#ffd633"},
+                    {"range": [30, 50], "color": "#33cc33"},
+                ],
+                "bgcolor": "rgba(0,0,0,0)",
+                "borderwidth": 2,
+                "bordercolor": "gray",
+            },
+            number={"font": {"size": 40}},
+        )
     )
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
+        font=dict(color="white"),
+        template="plotly_dark",
+    )
+
+     # Display the Chart
+    chart_placeholder.plotly_chart(fig, use_container_width=True)
 
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
