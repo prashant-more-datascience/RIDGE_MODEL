@@ -76,6 +76,97 @@ Suggest optimized values for these attributes to improve fuel efficiency.
         return f"Error: {response.status_code} - {response.text}"
 
 
+
+
+# Function to Check if Question is Car-Related
+def is_car_related(user_input):
+    keywords = [
+        "car",
+        "engine",
+        "fuel",
+        "horsepower",
+        "mpg",
+        "mileage",
+        "brake",
+        "transmission",
+        "tires",
+        "battery",
+        "speed",
+        "torque",
+        "oil",
+        "hybrid",
+        "electric",
+        "vehicle",
+        "diesel",
+        "gasoline",
+    ]
+    return any(word in user_input.lower() for word in keywords)
+
+
+# Function to Get Chatbot Responses
+def chat_with_bot(user_input):
+    if not is_car_related(user_input):
+        return "🚫 Sorry, I can only answer car-related questions."
+
+    prompt = f"You are a car expert assistant. Only answer car-related questions. If the question is not related to cars, respond with an apology. \n\nUser: {user_input}\nAI:"
+
+    headers = {
+        "Authorization": f"Bearer {HF_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "inputs": prompt,
+        "parameters": {
+            "max_new_tokens": 500,
+            "temperature": 0.7,
+            "do_sample": True,
+            "return_full_text": False,
+        },
+    }
+
+    response = requests.post(
+        f"https://api-inference.huggingface.co/models/{HF_MODEL}",
+        json=payload,
+        headers=headers,
+    )
+
+    return (
+        response.json()[0]["generated_text"]
+        if response.status_code == 200
+        else f"Error: {response.status_code} - {response.text}"
+    )
+
+
+def create_gauge_chart(mpg_value):
+    fig = go.Figure(
+        go.Indicator(
+            mode="gauge+number",
+            value=mpg_value,
+            title={"text": "Miles Per Gallon (MPG)", "font": {"size": 24}},
+            gauge={
+                "axis": {"range": [0, 50], "tickwidth": 1, "tickcolor": "white"},
+                "bar": {"color": "purple"},
+                "steps": [
+                    {"range": [0, 15], "color": "#ff4d4d"},
+                    {"range": [15, 30], "color": "#ffd633"},
+                    {"range": [30, 50], "color": "#33cc33"},
+                ],
+                "bgcolor": "rgba(0,0,0,0)",
+                "borderwidth": 2,
+                "bordercolor": "gray",
+            },
+            number={"font": {"size": 40}},
+        )
+    )
+    fig.update_layout(
+        transition=dict(duration=500),  # Smooth animation
+        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
+        font=dict(color="white"),
+        template="plotly_dark",
+    )
+    return fig
+
+
 # Custom CSS for fonts, colors, and stylish input fields
 def set_custom_css():
     custom_css = """
@@ -187,6 +278,9 @@ weight = st.number_input("Weight", min_value=0.0, format="%.2f")
 horsepower = st.number_input("Horsepower", min_value=0.0, format="%.2f")
 cylinders = st.slider("Cylinders", 2, 12, 6)
 
+# Placeholder for Gauge Chart
+chart_placeholder = st.empty()
+
 # Predict Button
 if st.button("Predict MPG & Get Suggestions"):
     # Prepare input data
@@ -201,34 +295,23 @@ if st.button("Predict MPG & Get Suggestions"):
     # Display result
     st.success(f"Predicted MPG: {mpg_prediction:.2f}")
 
-    # Visualization of Predicted MPG using Gauge Chart
-    st.subheader("📊 Predicted Fuel Efficiency (Gauge Chart)")
-    fig = go.Figure(
-        go.Indicator(
-            mode="gauge+number",
-            value=mpg_prediction,
-            title={"text": "Miles Per Gallon (MPG)"},
-            gauge={
-                "axis": {"range": [0, 50]},
-                "bar": {"color": "purple"},
-                "steps": [
-                    {"range": [0, 15], "color": "#ff4d4d"},
-                    {"range": [15, 30], "color": "#ffd633"},
-                    {"range": [30, 50], "color": "#33cc33"},
-                ],
-                "bgcolor": "rgba(0,0,0,0)",  # Fully transparent background
-                "borderwidth": 2,
-                "bordercolor": "gray",
-            },
+   
+    # Animate the Gauge Chart smoothly from 0 to predicted MPG
+    for i, value in enumerate(
+        np.linspace(0, mpg_prediction, num=30)
+    ):  # Smooth transition
+        chart_placeholder.empty()  # Clear previous chart to prevent duplicate IDs
+        chart_placeholder.plotly_chart(
+            create_gauge_chart(value), use_container_width=True, key=f"gauge_{i}"
         )
+        time.sleep(0.05)  # Delay for smooth effect
+
+    # Display Final Gauge Chart
+    chart_placeholder.empty()  # Clear animation steps
+    chart_placeholder.plotly_chart(
+        create_gauge_chart(mpg_prediction), use_container_width=True, key="gauge_final"
     )
-    fig.update_layout(
-        transition_duration=500,  # Smooth animation effect
-        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
-        font=dict(color="white"),  # Adjust font color for better visibility
-        template="plotly_dark",
-    )
-    st.plotly_chart(fig)
+
 
     # Get LLM suggestions
     llm_response = suggest_car_modifications(
@@ -243,3 +326,37 @@ if st.button("Predict MPG & Get Suggestions"):
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
     st.markdown("</div>", unsafe_allow_html=True)
+
+
+
+st.subheader("💬 AI Car Expert Chatbot")
+st.write("Ask me anything about cars, engines, fuel efficiency, and maintenance!")
+
+# Initialize Chat History
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+# Chat Input
+user_input = st.text_input(
+    "You:", key="chat_input", placeholder="Ask a car-related question..."
+)
+
+# Ask Button
+if st.button("Ask AI"):
+    if user_input:
+        # Add User Message to Chat History
+        st.session_state.chat_history.append(f"🧑 You: {user_input}")
+
+        # Get AI Response
+        ai_response = chat_with_bot(user_input)
+
+        # Add AI Response to Chat History
+        st.session_state.chat_history.append(f"🤖 AI: {ai_response}")
+
+# Display Chat History
+if st.session_state.chat_history:
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+    for message in st.session_state.chat_history[-5:]:  # Show last 5 messages
+        st.write(message)
+    st.markdown("</div>", unsafe_allow_html=True)
+
