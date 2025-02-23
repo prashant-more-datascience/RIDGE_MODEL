@@ -260,7 +260,34 @@ if st.button("Predict MPG & Get Suggestions"):
     # Display result
     st.success(f"Predicted MPG: {mpg_prediction:.2f}")
 
-  
+    # Visualization of Predicted MPG using Gauge Chart
+    st.subheader("📊 Predicted Fuel Efficiency (Gauge Chart)")
+    fig = go.Figure(
+        go.Indicator(
+            mode="gauge+number",
+            value=mpg_prediction,
+            title={"text": "Miles Per Gallon (MPG)"},
+            gauge={
+                "axis": {"range": [0, 50]},
+                "bar": {"color": "purple"},
+                "steps": [
+                    {"range": [0, 15], "color": "#ff4d4d"},
+                    {"range": [15, 30], "color": "#ffd633"},
+                    {"range": [30, 50], "color": "#33cc33"},
+                ],
+                "bgcolor": "rgba(0,0,0,0)",  # Fully transparent background
+                "borderwidth": 2,
+                "bordercolor": "gray",
+            },
+        )
+    )
+    fig.update_layout(
+        transition_duration=500,  # Smooth animation effect
+        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
+        font=dict(color="white"),  # Adjust font color for better visibility
+        template="plotly_dark",
+    )
+    st.plotly_chart(fig)
 
     # Get LLM suggestions
     llm_response = suggest_car_modifications(
@@ -272,40 +299,10 @@ if st.button("Predict MPG & Get Suggestions"):
     st.subheader("🔍 Prediction Results")
     st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
 
-with chart_placeholder.container():
-        st.subheader("📊 Predicted Fuel Efficiency (Gauge Chart)")
-        fig = go.Figure(
-            go.Indicator(
-                mode="gauge+number",
-                value=mpg_prediction,
-                title={"text": "Miles Per Gallon (MPG)"},
-                gauge={
-                    "axis": {"range": [0, 50]},
-                    "bar": {"color": "purple"},
-                    "steps": [
-                        {"range": [0, 15], "color": "#ff4d4d"},
-                        {"range": [15, 30], "color": "#ffd633"},
-                        {"range": [30, 50], "color": "#33cc33"},
-                    ],
-                    "bgcolor": "rgba(0,0,0,0)",
-                    "borderwidth": 2,
-                    "bordercolor": "gray",
-                },
-            )
-        )
-        fig.update_layout(
-            transition_duration=500,
-            paper_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="white"),
-            template="plotly_dark",
-        )
-        st.plotly_chart(fig)
-
-
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
     st.markdown("</div>", unsafe_allow_html=True)
-        
+
 st.subheader("💬 AI Car Expert Chatbot")
 st.write("Ask me anything about cars, engines, fuel efficiency, and maintenance!")
 
