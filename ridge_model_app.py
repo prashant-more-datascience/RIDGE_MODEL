@@ -300,7 +300,8 @@ with chart_placeholder.container():
             template="plotly_dark",
         )
         st.plotly_chart(fig)
-        
+
+
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
     st.markdown("</div>", unsafe_allow_html=True)
