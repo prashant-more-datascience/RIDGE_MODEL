@@ -76,63 +76,66 @@ Suggest optimized values for these attributes to improve fuel efficiency.
     else:
         return f"Error: {response.status_code} - {response.text}"
 
-# Function to Check if Question is Car-Related
-def is_car_related(user_input):
-    keywords = [
-        "car",
-        "engine",
-        "fuel",
-        "horsepower",
-        "mpg",
-        "mileage",
-        "brake",
-        "transmission",
-        "tires",
-        "battery",
-        "speed",
-        "torque",
-        "oil",
-        "hybrid",
-        "electric",
-        "vehicle",
-        "diesel",
-        "gasoline",
-    ]
-    return any(word in user_input.lower() for word in keywords)
-
 
 # Function to Get Chatbot Responses
-def chat_with_bot(user_input):
-    if not is_car_related(user_input):
-        return "🚫 Sorry, I can only answer car-related questions."
+def chat_with_bot():
+    # Unique key for chat input (avoids duplicate errors)
+    chat_input_key = f"chat_input_{len(st.session_state.chat_history)}"
 
-    prompt = f"You are a car expert assistant. Only answer car-related questions. If the question is not related to cars, respond with an apology. \n\nUser: {user_input}\nAI:"
-
-    headers = {
-        "Authorization": f"Bearer {HF_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "inputs": prompt,
-        "parameters": {
-            "max_new_tokens": 500,
-            "temperature": 0.7,
-            "do_sample": True,
-            "return_full_text": False,
-        },
-    }
-
-    response = requests.post(
-        f"https://api-inference.huggingface.co/models/{HF_MODEL}",
-        json=payload,
-        headers=headers,
+    user_input = st.text_input(
+        "You:", key=chat_input_key, placeholder="Ask a car-related question..."
     )
 
-    return (
-        response.json()[0]["generated_text"]
-        if response.status_code == 200
-        else f"Error: {response.status_code} - {response.text}"
-    )
+    if user_input:
+        # Store the user's message
+        st.session_state.chat_history.append(f"🧑 You: {user_input}")
+
+        # Generate AI Response
+        formatted_history = "\n".join(
+            st.session_state.chat_history[-5:]
+        )  # Keep last 5 messages for context
+        prompt = f"{formatted_history}\nUser: {user_input}\nAI:"
+
+        headers = {
+            "Authorization": f"Bearer {HF_API_KEY}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "inputs": prompt,
+            "parameters": {
+                "max_new_tokens": 200,
+                "temperature": 0.7,
+                "do_sample": True,
+                "return_full_text": False,
+            },
+        }
+
+        response = requests.post(
+            f"https://api-inference.huggingface.co/models/{HF_MODEL}",
+            json=payload,
+            headers=headers,
+        )
+
+        ai_response = (
+            response.json()[0]["generated_text"]
+            if response.status_code == 200
+            else f"Error: {response.status_code} - {response.text}"
+        )
+
+        # Store AI Response
+        st.session_state.chat_history.append(f"🤖 AI: {ai_response}")
+
+        # Refresh UI to update chat history
+        st.rerun()
+
+
+# Initialize Chat History & Stored Data
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+if "mpg_prediction" not in st.session_state:
+    st.session_state.mpg_prediction = None
+if "ai_suggestions" not in st.session_state:
+    st.session_state.ai_suggestions = None
 
 
 # Custom CSS for fonts, colors, and stylish input fields
@@ -210,8 +213,10 @@ def set_custom_css():
     """
     st.markdown(custom_css, unsafe_allow_html=True)
 
+
 # Call function to apply custom styling
 set_custom_css()
+
 
 # Set background image with animation
 def set_bg_from_url(image_url):
@@ -227,6 +232,7 @@ def set_bg_from_url(image_url):
     """
     st.markdown(bg_css, unsafe_allow_html=True)
     # Custom CSS for fonts and colors
+
 
 # Set animated background (Replace with your car image URL)
 car_image_url = "https://i.pinimg.com/736x/d9/4a/64/d94a643f26453333ad4354daad504b9c.jpg"  # Example URL
@@ -255,17 +261,23 @@ if st.button("Predict MPG & Get Suggestions"):
     input_scaled = scaler.transform(input_data)
 
     # Make prediction
-    mpg_prediction = ridge_model.predict(input_scaled)[0]
+    st.session_state.mpg_prediction = ridge_model.predict(input_scaled)[0]
 
-    # Display result
-    st.success(f"Predicted MPG: {mpg_prediction:.2f}")
+    # Get LLM suggestions
+    llm_response = suggest_car_modifications(
+        acceleration, displacement, weight, horsepower, cylinders
+    )
 
-    # Visualization of Predicted MPG using Gauge Chart
-    st.subheader("📊 Predicted Fuel Efficiency (Gauge Chart)")
+    st.session_state.ai_suggestions = llm_response
+
+
+# **Ensure Prediction & AI Suggestions Remain Visible**
+if st.session_state.mpg_prediction is not None:
+    st.subheader("📊 Predicted Fuel Efficiency")
     fig = go.Figure(
         go.Indicator(
             mode="gauge+number",
-            value=mpg_prediction,
+            value=st.session_state.mpg_prediction,
             title={"text": "Miles Per Gallon (MPG)"},
             gauge={
                 "axis": {"range": [0, 50]},
@@ -289,48 +301,18 @@ if st.button("Predict MPG & Get Suggestions"):
     )
     st.plotly_chart(fig)
 
-    # Get LLM suggestions
-    llm_response = suggest_car_modifications(
-        acceleration, displacement, weight, horsepower, cylinders
-    )
+    st.success(f"✅ Predicted MPG: {st.session_state.mpg_prediction:.2f} MPG")
 
-    # Display results
-    st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
-    st.subheader("🔍 Prediction Results")
-    st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
 
+if st.session_state.ai_suggestions:
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
-    st.write(llm_response)
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.write(st.session_state.ai_suggestions)
+
 
 st.subheader("💬 AI Car Expert Chatbot")
 st.write("Ask me anything about cars, engines, fuel efficiency, and maintenance!")
 
-# Initialize Chat History
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+for message in st.session_state.chat_history:
+    st.write(message)
 
-# Chat Input
-user_input = st.text_input(
-    "You:", key="chat_input", placeholder="Ask a car-related question..."
-)
-
-# Ask Button
-if st.button("Ask AI"):
-    if user_input:
-        # Add User Message to Chat History
-        st.session_state.chat_history.append(f"🧑 You: {user_input}")
-
-        # Get AI Response
-        ai_response = chat_with_bot(user_input)
-
-        # Add AI Response to Chat History
-        st.session_state.chat_history.append(f"🤖 AI: {ai_response}")
-
-# Display Chat History
-if st.session_state.chat_history:
-    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
-    for message in st.session_state.chat_history[-5:]:  # Show last 5 messages
-        st.write(message)
-    st.markdown("</div>", unsafe_allow_html=True)
-
+chat_with_bot()
