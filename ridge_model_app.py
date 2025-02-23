@@ -4,6 +4,7 @@ import numpy as np
 import requests
 import plotly.graph_objects as go
 import plotly.express as px
+import time
 
 # Load the trained Ridge model and StandardScaler
 with open("ridge_model.pkl", "rb") as model_file:
@@ -75,9 +76,6 @@ Suggest optimized values for these attributes to improve fuel efficiency.
     else:
         return f"Error: {response.status_code} - {response.text}"
 
-
-
-
 # Function to Check if Question is Car-Related
 def is_car_related(user_input):
     keywords = [
@@ -136,7 +134,6 @@ def chat_with_bot(user_input):
         else f"Error: {response.status_code} - {response.text}"
     )
 
-
 def create_gauge_chart(mpg_value):
     fig = go.Figure(
         go.Indicator(
@@ -165,7 +162,6 @@ def create_gauge_chart(mpg_value):
         template="plotly_dark",
     )
     return fig
-
 
 # Custom CSS for fonts, colors, and stylish input fields
 def set_custom_css():
@@ -245,7 +241,6 @@ def set_custom_css():
 # Call function to apply custom styling
 set_custom_css()
 
-
 # Set background image with animation
 def set_bg_from_url(image_url):
     bg_css = f"""
@@ -295,7 +290,19 @@ if st.button("Predict MPG & Get Suggestions"):
     # Display result
     st.success(f"Predicted MPG: {mpg_prediction:.2f}")
 
-   
+  
+
+    # Get LLM suggestions
+    llm_response = suggest_car_modifications(
+        acceleration, displacement, weight, horsepower, cylinders
+    )
+
+    # Display results
+    st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
+    st.subheader("🔍 Prediction Results")
+    st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
+
+     
     # Animate the Gauge Chart smoothly from 0 to predicted MPG
     for i, value in enumerate(
         np.linspace(0, mpg_prediction, num=30)
@@ -313,20 +320,9 @@ if st.button("Predict MPG & Get Suggestions"):
     )
 
 
-    # Get LLM suggestions
-    llm_response = suggest_car_modifications(
-        acceleration, displacement, weight, horsepower, cylinders
-    )
-
-    # Display results
-    st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
-    st.subheader("🔍 Prediction Results")
-    st.write(f"**Predicted MPG (Miles Per Gallon):** {mpg_prediction:.2f}")
-
     st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
     st.write(llm_response)
     st.markdown("</div>", unsafe_allow_html=True)
-
 
 
 st.subheader("💬 AI Car Expert Chatbot")
