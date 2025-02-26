@@ -19,6 +19,7 @@ HF_MODEL = (
     "mistralai/Mistral-7B-Instruct-v0.3"  # Choose a model suitable for text analysis
 )
 
+
 HF_MODEL2 = (
     "mistralai/Mixtral-8x7B-Instruct-v0.1"  # Choose a model suitable for text analysis
 )
@@ -148,7 +149,6 @@ if "ai_suggestions" not in st.session_state:
 
 # Custom CSS for fonts, colors, and stylish input fields
 import streamlit as st
-import streamlit as st
 
 
 def set_custom_css():
@@ -158,7 +158,7 @@ def set_custom_css():
         html, body, [class*="st-"] {
             font-family: "Times New Roman", serif;
             color: #f8f8ff;
-            font-size: 32px !important;  /* Larger global text */
+            font-size: 29px !important;  /* Decreased global text size */
         }
         .stApp {
             background-color: #1a1a1a !important; /* Slightly darker background */
@@ -170,7 +170,7 @@ def set_custom_css():
             to { opacity: 1; transform: translateY(0px); }
         }
         .welcome-message {
-            font-size: 50px;
+            font-size: 47px;  /* Decreased from 50px */
             font-weight: bold;
             color: #ffaa00;
             text-align: center;
@@ -180,7 +180,7 @@ def set_custom_css():
 
         /* Titles & Headers */
         .stTitle, .stHeader, h1, h2, h3 {
-            font-size: 48px !important;  /* Bigger Titles */
+            font-size: 45px !important;  /* Decreased from 48px */
             font-weight: bold;
             color: #f8f8ff;
         }
@@ -190,7 +190,7 @@ def set_custom_css():
         div[data-testid="stNumberInput"] label,  
         div[data-testid="stSelectbox"] label,  
         div[data-testid="stSlider"] label {
-            font-size: 36px !important;  /* Bigger Input Titles */
+            font-size: 33px !important;  /* Decreased from 36px */
             font-weight: bold !important;
             background: linear-gradient(90deg, #ffaa00, #ff5500);
             -webkit-background-clip: text;
@@ -205,7 +205,7 @@ def set_custom_css():
             color: #f8f8ff !important;
             border: 2px solid #777 !important;
             font-family: "Times New Roman", serif;
-            font-size: 32px !important;
+            font-size: 29px !important;  /* Decreased from 32px */
             padding: 16px;
             border-radius: 12px;
             transition: all 0.3s ease-in-out;
@@ -220,7 +220,7 @@ def set_custom_css():
 
         /* AI Response Box - Animated */
         .stMarkdown p {
-            font-size: 34px !important;  /* Bigger AI Response Text */
+            font-size: 31px !important;  /* Decreased from 34px */
             line-height: 1.6;
             animation: slideUp 1s ease-in-out; /* Slide in effect */
             background-color: rgba(255, 255, 255, 0.1);
@@ -230,7 +230,7 @@ def set_custom_css():
 
         /* Gradient Buttons */
         .stButton>button {
-            font-size: 32px !important; /* Bigger Buttons */
+            font-size: 29px !important; /* Decreased from 32px */
             font-weight: bold;
             background: linear-gradient(90deg, #ff6600, #ffcc00);
             color: #1a1a1a !important;
@@ -256,7 +256,7 @@ def set_custom_css():
         /* Modify Gauge Chart Text */
         .gauge-text {
             color: #f8f8ff !important;
-            font-size: 38px !important; /* Bigger Gauge Chart Text */
+            font-size: 35px !important; /* Decreased from 38px */
         }
 
         /* Animations */
