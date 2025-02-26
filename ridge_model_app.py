@@ -19,6 +19,10 @@ HF_MODEL = (
     "mistralai/Mistral-7B-Instruct-v0.3"  # Choose a model suitable for text analysis
 )
 
+HF_MODEL2 = (
+    "mistralai/Mixtral-8x7B-Instruct-v0.1"  # Choose a model suitable for text analysis
+)
+
 
 def suggest_car_modifications(
     acceleration, displacement, weight, horsepower, cylinders
@@ -31,12 +35,12 @@ def suggest_car_modifications(
 - 🔥 **Horsepower:** {horsepower} HP
 - 🔩 **Cylinders:** {cylinders}
 
-### **🔹 Optimize for Better Fuel Efficiency**
-Suggest optimized values for these attributes to improve fuel efficiency.
-#### **Suggested Adjustments to Car Specs**
-- Recommend **new values** for acceleration, displacement, weight, horsepower, and cylinders.  
-- Justify **why each change** will increase fuel economy.  
-- Provide a **numerical comparison** (e.g., “Reducing weight by 10% can improve fuel efficiency by ~5%”).  
+    ### **🔹 Goal: Optimize Fuel Efficiency**
+    - Suggest **new values** for each attribute (acceleration, displacement, weight, horsepower, cylinders).
+    - Explain **why each change** will improve fuel economy.
+    - Provide **a numerical comparison** (e.g., "Reducing weight by 10% can improve fuel efficiency by ~5%").
+    - Suggest **real-world solutions** (e.g., using aluminum body panels to reduce weight).
+    
 
 #### **Specific Component Upgrades**
 - Suggest **exact engine modifications** (e.g., downsizing, hybrid conversion, turbocharging).  
@@ -48,6 +52,7 @@ Suggest optimized values for these attributes to improve fuel efficiency.
 - Explain which **changes give the highest improvement for the lowest cost**.  
 
 💡 **Provide practical and accurate suggestions. Avoid general answers.**
+    
     """
 
     headers = {
@@ -58,8 +63,8 @@ Suggest optimized values for these attributes to improve fuel efficiency.
     payload = {
         "inputs": prompt,
         "parameters": {
-            "max_new_tokens": 700,  # Ensure enough space for output
-            "temperature": 0.7,  # Higher creativity for better suggestions
+            "max_new_tokens": 800,  # Ensure enough space for output
+            "temperature": 0.5,  # Higher creativity for better suggestions
             "do_sample": True,  # Prevent deterministic responses
             "return_full_text": False,  # ✅ THIS STOPS ECHOING PROMPT!
         },
@@ -94,7 +99,10 @@ def chat_with_bot():
         formatted_history = "\n".join(
             st.session_state.chat_history[-5:]
         )  # Keep last 5 messages for context
-        prompt = f"{formatted_history}\nUser: {user_input}\nAI:"
+        prompt = f"""You are a professional **car expert** chatbot. 
+                    - **Only** answer questions related to cars, engines, fuel efficiency, or vehicle maintenance. 
+                    - If the question is **not** related to cars, reply with: "I only answer car-related questions."
+                    - Always provide a **detailed** and **accurate** answer.{formatted_history}\nUser: {user_input}\nAI:"""
 
         headers = {
             "Authorization": f"Bearer {HF_API_KEY}",
@@ -103,15 +111,15 @@ def chat_with_bot():
         payload = {
             "inputs": prompt,
             "parameters": {
-                "max_new_tokens": 200,
-                "temperature": 0.7,
+                "max_new_tokens": 400,
+                "temperature": 0.5,
                 "do_sample": True,
                 "return_full_text": False,
             },
         }
 
         response = requests.post(
-            f"https://api-inference.huggingface.co/models/{HF_MODEL}",
+            f"https://api-inference.huggingface.co/models/{HF_MODEL2}",
             json=payload,
             headers=headers,
         )
@@ -139,82 +147,144 @@ if "ai_suggestions" not in st.session_state:
 
 
 # Custom CSS for fonts, colors, and stylish input fields
+import streamlit as st
+import streamlit as st
+
+
 def set_custom_css():
     custom_css = """
     <style>
-        /* Set global font to Times New Roman and text color to off-white */
+        /* Global Font and Darker Background */
         html, body, [class*="st-"] {
             font-family: "Times New Roman", serif;
             color: #f8f8ff;
+            font-size: 32px !important;  /* Larger global text */
+        }
+        .stApp {
+            background-color: #1a1a1a !important; /* Slightly darker background */
         }
 
-        /* Background Styling */
-        .stApp {
-            background-color: #2b2b2b; /* Dark background */
+        /* Animated Welcome Message */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0px); }
+        }
+        .welcome-message {
+            font-size: 50px;
+            font-weight: bold;
+            color: #ffaa00;
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+            margin-bottom: 20px;
         }
 
         /* Titles & Headers */
-        .stTitle, .stHeader {
-            font-size: 28px;
+        .stTitle, .stHeader, h1, h2, h3 {
+            font-size: 48px !important;  /* Bigger Titles */
             font-weight: bold;
             color: #f8f8ff;
         }
 
-        /* Streamlit widget labels */
-        label {
-            font-size: 18px;
-            color: #f8f8ff;
+        /* Animated Input Titles */
+        div[data-testid="stTextInput"] label,  
+        div[data-testid="stNumberInput"] label,  
+        div[data-testid="stSelectbox"] label,  
+        div[data-testid="stSlider"] label {
+            font-size: 36px !important;  /* Bigger Input Titles */
+            font-weight: bold !important;
+            background: linear-gradient(90deg, #ffaa00, #ff5500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            animation: fadeIn 1.5s ease-in-out, pulse 2s infinite;
         }
 
-        /* Buttons */
-        .stButton>button {
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #4a4a4a;
-            color: #f8f8ff;
-            border-radius: 8px;
-            padding: 10px 20px;
-            transition: 0.3s ease-in-out;
-        }
-        .stButton>button:hover {
-            background-color: #6a6a6a;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
-        }
-
-        /* Input Fields - Black Background with Smooth Borders */
+        /* Input Field Styling */
         input, textarea, select {
-            background-color: black !important;
+            background-color: #0d0d0d !important; /* Darker input fields */
             color: #f8f8ff !important;
-            border: 2px solid #666 !important;
+            border: 2px solid #777 !important;
             font-family: "Times New Roman", serif;
-            font-size: 16px;
-            padding: 10px;
-            border-radius: 8px;
+            font-size: 32px !important;
+            padding: 16px;
+            border-radius: 12px;
             transition: all 0.3s ease-in-out;
         }
 
-        /* Glow Effect on Focus */
+        /* Hover Glow Effect */
         input:focus, textarea:focus, select:focus {
-            border-color: #ffcc00 !important;
-            box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.6);
+            border-color: #ffaa00 !important;
+            box-shadow: 0px 0px 14px rgba(255, 170, 0, 0.7);
             outline: none;
+        }
+
+        /* AI Response Box - Animated */
+        .stMarkdown p {
+            font-size: 34px !important;  /* Bigger AI Response Text */
+            line-height: 1.6;
+            animation: slideUp 1s ease-in-out; /* Slide in effect */
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        /* Gradient Buttons */
+        .stButton>button {
+            font-size: 32px !important; /* Bigger Buttons */
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff6600, #ffcc00);
+            color: #1a1a1a !important;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 5px 10px rgba(255, 102, 0, 0.3);
+        }
+
+        /* Button Hover Effect */
+        .stButton>button:hover {
+            background: linear-gradient(90deg, #ffcc00, #ff6600);
+            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
         }
 
         /* Sidebar Styling */
         .stSidebar {
-            background-color: #222;
+            background-color: #111 !important; /* Darker Sidebar */
         }
 
         /* Modify Gauge Chart Text */
         .gauge-text {
             color: #f8f8ff !important;
+            font-size: 38px !important; /* Bigger Gauge Chart Text */
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0px); }
+        }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 6px #ff6600; }
+            50% { text-shadow: 0 0 20px #ffaa00; }
+            100% { text-shadow: 0 0 6px #ff6600; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0px); }
         }
     </style>
     """
     st.markdown(custom_css, unsafe_allow_html=True)
 
+    # Display the Animated Welcome Message
+    st.markdown(
+        '<h1 class="welcome-message">🚗 Welcome to AI-Powered Fuel Efficiency Analyzer! 🚀</h1>',
+        unsafe_allow_html=True,
+    )
 
-# Call function to apply custom styling
+
+# Call function to apply custom styling and welcome message
 set_custom_css()
 
 
@@ -235,11 +305,11 @@ def set_bg_from_url(image_url):
 
 
 # Set animated background (Replace with your car image URL)
-car_image_url = "https://i.pinimg.com/736x/d9/4a/64/d94a643f26453333ad4354daad504b9c.jpg"  # Example URL
+car_image_url = "https://i.pinimg.com/736x/97/19/3b/97193ba8ca578a50149be826c0093fde.jpg"  # Example URL
 set_bg_from_url(car_image_url)
 
 # Streamlit App Title
-st.title("🚗 Fuel Efficiency Prediction (MPG) & Optimization Tips")
+
 st.write(
     "Enter vehicle details to predict fuel efficiency (MPG) and get tips to improve it."
 )
