@@ -101,8 +101,9 @@ def chat_with_bot():
             st.session_state.chat_history[-5:]
         )  # Keep last 5 messages for context
         prompt = f"""You are a **car expert chatbot**.  
-- Answer **only car-related questions**.  
+- Answer ** car-related questions**.  
 - Do **not** ask questions or continue conversations.  
+- Do **not** include "User:" in your response.  
 - If a question is **not about cars**, reply: "I only answer car-related questions."  
 
 ### **✅ Response Format (Clear & Structured)**  
