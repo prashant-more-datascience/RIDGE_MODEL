@@ -157,7 +157,7 @@ def set_custom_css():
         html, body, [class*="st-"] {
             font-family: "Times New Roman", serif;
             color: #f8f8ff;
-            font-size: 22px !important; /* Decreased from 26px */
+            font-size: 19px !important; /* Decreased from 22px */
         }
         .stApp {
             background-color: #0d0d0d !important;
@@ -169,7 +169,7 @@ def set_custom_css():
             to { opacity: 1; transform: translateY(0px); }
         }
         .welcome-message {
-            font-size: 40px; /* Decreased from 44px */
+            font-size: 37px; /* Decreased from 40px */
             font-weight: bold;
             color: #ffaa00;
             text-align: center;
@@ -179,19 +179,19 @@ def set_custom_css():
 
         /* Titles & Headers */
         .stTitle, .stHeader, h1, h2, h3 {
-            font-size: 38px !important; /* Decreased from 42px */
+            font-size: 35px !important; /* Decreased from 38px */
             font-weight: bold;
             color: #f8f8ff;
         }
 
-        /* 🚀 AI Response - 25% Darker Background */
+        /* 🚀 AI Response - Darker Background */
         .ai-response {
             background: linear-gradient(135deg, rgba(5, 5, 5, 0.98), rgba(0, 0, 0, 1));
             border: 2px solid rgba(255, 204, 0, 1);
             color: #ffcc00;
-            font-size: 24px; /* Decreased from 28px */
-            line-height: 1.6;
-            padding: 16px;
+            font-size: 21px; /* Decreased from 24px */
+            line-height: 1.5;
+            padding: 14px;
             border-radius: 15px;
             box-shadow: 0px 4px 10px rgba(255, 204, 0, 0.5);
             transition: all 0.3s ease-in-out;
@@ -207,7 +207,7 @@ def set_custom_css():
         div[data-testid="stNumberInput"] label,  
         div[data-testid="stSelectbox"] label,  
         div[data-testid="stSlider"] label {
-            font-size: 32px !important; /* Decreased from 36px */
+            font-size: 29px !important; /* Decreased from 32px */
             font-weight: bold !important;
             background: linear-gradient(90deg, #ffaa00, #ff5500);
             -webkit-background-clip: text;
@@ -222,8 +222,8 @@ def set_custom_css():
             color: #f8f8ff !important;
             border: 2px solid #777 !important;
             font-family: "Times New Roman", serif;
-            font-size: 22px !important; /* Decreased from 26px */
-            padding: 12px;
+            font-size: 19px !important; /* Decreased from 22px */
+            padding: 10px;
             border-radius: 12px;
             transition: all 0.3s ease-in-out;
         }
@@ -231,19 +231,19 @@ def set_custom_css():
         /* Hover Glow Effect */
         input:focus, textarea:focus, select:focus {
             border-color: #ffaa00 !important;
-            box-shadow: 0px 0px 14px rgba(255, 170, 0, 0.8);
+            box-shadow: 0px 0px 12px rgba(255, 170, 0, 0.8);
             outline: none;
         }
 
         /* Gradient Buttons */
         .stButton>button {
-            font-size: 22px !important; /* Decreased from 26px */
+            font-size: 19px !important; /* Decreased from 22px */
             font-weight: bold;
             background: linear-gradient(90deg, #ff6600, #ffcc00);
             color: #1a1a1a !important;
             border: none;
             border-radius: 12px;
-            padding: 12px 24px;
+            padding: 10px 22px;
             transition: 0.3s ease-in-out;
             box-shadow: 0px 5px 10px rgba(255, 102, 0, 0.4);
         }
@@ -263,7 +263,7 @@ def set_custom_css():
         /* Modify Gauge Chart Text */
         .gauge-text {
             color: #f8f8ff !important;
-            font-size: 28px !important; /* Decreased from 32px */
+            font-size: 25px !important; /* Decreased from 28px */
         }
 
         /* Animations */
