@@ -148,8 +148,6 @@ if "ai_suggestions" not in st.session_state:
 
 
 # Custom CSS for fonts, colors, and stylish input fields
-import streamlit as st
-
 
 def set_custom_css():
     custom_css = """
@@ -158,10 +156,10 @@ def set_custom_css():
         html, body, [class*="st-"] {
             font-family: "Times New Roman", serif;
             color: #f8f8ff;
-            font-size: 29px !important;  /* Decreased global text size */
+            font-size: 26px !important;
         }
         .stApp {
-            background-color: #1a1a1a !important; /* Slightly darker background */
+            background-color: #0d0d0d !important; /* 25% Darker Background */
         }
 
         /* Animated Welcome Message */
@@ -170,7 +168,7 @@ def set_custom_css():
             to { opacity: 1; transform: translateY(0px); }
         }
         .welcome-message {
-            font-size: 47px;  /* Decreased from 50px */
+            font-size: 44px;
             font-weight: bold;
             color: #ffaa00;
             text-align: center;
@@ -180,17 +178,35 @@ def set_custom_css():
 
         /* Titles & Headers */
         .stTitle, .stHeader, h1, h2, h3 {
-            font-size: 45px !important;  /* Decreased from 48px */
+            font-size: 42px !important;
             font-weight: bold;
             color: #f8f8ff;
         }
 
-        /* Animated Input Titles */
+        /* 🚀 AI Response - 25% Darker Background */
+        .ai-response {
+            background: linear-gradient(135deg, rgba(5, 5, 5, 0.98), rgba(0, 0, 0, 1));
+            border: 2px solid rgba(255, 204, 0, 1);
+            color: #ffcc00;
+            font-size: 28px;
+            line-height: 1.6;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(255, 204, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+            animation: slideUp 0.8s ease-in-out;
+        }
+        .ai-response:hover {
+            box-shadow: 0px 4px 20px rgba(255, 204, 0, 0.7);
+            transform: scale(1.03);
+        }
+
+        /* 🚀 Increased Input Label Size */
         div[data-testid="stTextInput"] label,  
         div[data-testid="stNumberInput"] label,  
         div[data-testid="stSelectbox"] label,  
         div[data-testid="stSlider"] label {
-            font-size: 33px !important;  /* Decreased from 36px */
+            font-size: 36px !important;
             font-weight: bold !important;
             background: linear-gradient(90deg, #ffaa00, #ff5500);
             -webkit-background-clip: text;
@@ -201,12 +217,12 @@ def set_custom_css():
 
         /* Input Field Styling */
         input, textarea, select {
-            background-color: #0d0d0d !important; /* Darker input fields */
+            background-color: #050505 !important; /* 25% Darker Input Fields */
             color: #f8f8ff !important;
             border: 2px solid #777 !important;
             font-family: "Times New Roman", serif;
-            font-size: 29px !important;  /* Decreased from 32px */
-            padding: 16px;
+            font-size: 26px !important;
+            padding: 14px;
             border-radius: 12px;
             transition: all 0.3s ease-in-out;
         }
@@ -214,49 +230,39 @@ def set_custom_css():
         /* Hover Glow Effect */
         input:focus, textarea:focus, select:focus {
             border-color: #ffaa00 !important;
-            box-shadow: 0px 0px 14px rgba(255, 170, 0, 0.7);
+            box-shadow: 0px 0px 18px rgba(255, 170, 0, 0.8);
             outline: none;
-        }
-
-        /* AI Response Box - Animated */
-        .stMarkdown p {
-            font-size: 31px !important;  /* Decreased from 34px */
-            line-height: 1.6;
-            animation: slideUp 1s ease-in-out; /* Slide in effect */
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 16px;
-            border-radius: 10px;
         }
 
         /* Gradient Buttons */
         .stButton>button {
-            font-size: 29px !important; /* Decreased from 32px */
+            font-size: 26px !important;
             font-weight: bold;
             background: linear-gradient(90deg, #ff6600, #ffcc00);
             color: #1a1a1a !important;
             border: none;
             border-radius: 12px;
-            padding: 16px 32px;
+            padding: 14px 28px;
             transition: 0.3s ease-in-out;
-            box-shadow: 0px 5px 10px rgba(255, 102, 0, 0.3);
+            box-shadow: 0px 5px 10px rgba(255, 102, 0, 0.4);
         }
 
         /* Button Hover Effect */
         .stButton>button:hover {
             background: linear-gradient(90deg, #ffcc00, #ff6600);
-            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.5);
-            transform: scale(1.05);
+            box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.6);
+            transform: scale(1.07);
         }
 
         /* Sidebar Styling */
         .stSidebar {
-            background-color: #111 !important; /* Darker Sidebar */
+            background-color: #050505 !important; /* 25% Darker Sidebar */
         }
 
         /* Modify Gauge Chart Text */
         .gauge-text {
             color: #f8f8ff !important;
-            font-size: 35px !important; /* Decreased from 38px */
+            font-size: 32px !important;
         }
 
         /* Animations */
@@ -265,9 +271,9 @@ def set_custom_css():
             to { opacity: 1; transform: translateY(0px); }
         }
         @keyframes pulse {
-            0% { text-shadow: 0 0 6px #ff6600; }
-            50% { text-shadow: 0 0 20px #ffaa00; }
-            100% { text-shadow: 0 0 6px #ff6600; }
+            0% { text-shadow: 0 0 8px #ff6600; }
+            50% { text-shadow: 0 0 25px #ffaa00; }
+            100% { text-shadow: 0 0 8px #ff6600; }
         }
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -288,24 +294,24 @@ def set_custom_css():
 set_custom_css()
 
 
-# Set background image with animation
+# Set background image with a dark overlay for better visibility
 def set_bg_from_url(image_url):
     bg_css = f"""
     <style>
-    .stApp {{
-        background-image: url("{image_url}");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }}
+        .stApp {{
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),  
+                        url("{image_url}") no-repeat center center fixed;
+            background-size: cover;
+        }}
     </style>
     """
     st.markdown(bg_css, unsafe_allow_html=True)
-    # Custom CSS for fonts and colors
 
 
-# Set animated background (Replace with your car image URL)
-car_image_url = "https://i.pinimg.com/736x/97/19/3b/97193ba8ca578a50149be826c0093fde.jpg"  # Example URL
+# Set darkened animated background (Replace with your car image URL)
+car_image_url = (
+    "https://i.pinimg.com/736x/60/5a/41/605a414422892fbb6c122582a0af7031.jpg"
+)
 set_bg_from_url(car_image_url)
 
 # Streamlit App Title
