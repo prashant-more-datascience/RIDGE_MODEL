@@ -101,19 +101,15 @@ def chat_with_bot():
             st.session_state.chat_history[-5:]
         )  # Keep last 5 messages for context
         prompt = f"""You are a **car expert chatbot**.  
-- Answer ** car-related questions**.  
-- Do **not** ask questions or continue conversations.  
-- Do **not** include "User:" in your response.  
+- Answer **only car-related questions**.  
+- Do **not** ask questions or start conversations.  
+- Do **not include "User:" in responses**.  
 - If a question is **not about cars**, reply: "I only answer car-related questions."  
+- Keep responses **concise, accurate, and professional**.  
 
-### **✅ Response Format (Clear & Structured)**  
-Every response must follow this format:    
-✅ **Use bullet points or numbered lists for clarity**  
-✅ **Always provide specific, accurate information**  
-### **🛑 AI Limitations**  
-- If the user repeats a non-car-related question, politely refuse.  
-
-{formatted_history}\nUser: {user_input}\nAI:"""
+User: {user_input}  
+AI:
+"""
 
         headers = {
             "Authorization": f"Bearer {HF_API_KEY}",
