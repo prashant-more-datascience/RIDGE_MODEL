@@ -14,7 +14,7 @@ with open("ridgescaler.pkl", "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
 # Hugging Face API Configuration
-HF_API_KEY = "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"  # Replace with your actual Hugging Face API key
+HF_API_KEY = "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"  # Replace with your actual Hugging Face API key
 HF_MODEL = (
     "mistralai/Mistral-7B-Instruct-v0.3"  # Choose a model suitable for text analysis
 )
@@ -108,8 +108,7 @@ def chat_with_bot():
 - Keep responses **concise, accurate, and professional**.  
 
 User: {user_input}  
-AI:
-"""
+AI:"""
 
         headers = {
             "Authorization": f"Bearer {HF_API_KEY}",
@@ -118,7 +117,7 @@ AI:
         payload = {
             "inputs": prompt,
             "parameters": {
-                "max_new_tokens": 400,
+                "max_new_tokens": 500,
                 "temperature": 0.5,
                 "do_sample": True,
                 "return_full_text": False,
@@ -155,6 +154,7 @@ if "ai_suggestions" not in st.session_state:
 
 # Custom CSS for fonts, colors, and stylish input fields
 import streamlit as st
+
 
 def set_custom_css():
     custom_css = """
@@ -292,9 +292,10 @@ def set_custom_css():
 
     # Display the Animated Welcome Message
     st.markdown(
-        '<h1 class="welcome-message">🚗 Welcome to AI-Powered Fuel Efficiency Analyzer! 🚀</h1>',
+        '<h1 class="welcome-message"> || Welcome Fuel Efficiency Predictor || </h1>',
         unsafe_allow_html=True,
     )
+
 
 # Call function to apply custom styling and welcome message
 set_custom_css()
@@ -316,26 +317,26 @@ def set_bg_from_url(image_url):
 
 # Set darkened animated background (Replace with your car image URL)
 car_image_url = (
-    "https://i.pinimg.com/736x/60/5a/41/605a414422892fbb6c122582a0af7031.jpg"
+    "https://i.pinimg.com/736x/28/a9/a2/28a9a25559512b25e9b1264543ddcf6b.jpg"
 )
 set_bg_from_url(car_image_url)
 
 # Streamlit App Title
 
 st.write(
-    "Enter vehicle details to predict fuel efficiency (MPG) and get tips to improve it."
+    "Enter vehicle details to predict fuel efficiency (KMPL) and get tips to improve it."
 )
 
 # Input fields
-acceleration = st.number_input("Acceleration (0-60 mph in sec)")
-displacement = st.number_input("Displacement", min_value=0.0, format="%.2f")
-weight = st.number_input("Weight", min_value=0.0, format="%.2f")
-horsepower = st.number_input("Horsepower", min_value=0.0, format="%.2f")
-cylinders = st.slider("Cylinders", 2, 8, 6)
+acceleration = st.number_input("Acceleration (0-60 mph in sec)",min_value=0)
+displacement = st.number_input("Displacement",min_value=0)
+weight = st.number_input("Weight",min_value=0)
+horsepower = st.number_input("Horsepower",min_value=0)
+cylinders = st.number_input("Cylinders",min_value=0,max_value=12)
 
 
 # Predict Button
-if st.button("Predict MPG & Get Suggestions"):
+if st.button("Predict KMPL"):
     # Prepare input data
     input_data = np.array([[acceleration, displacement, weight, horsepower, cylinders]])
 
@@ -360,7 +361,7 @@ if st.session_state.mpg_prediction is not None:
         go.Indicator(
             mode="gauge+number",
             value=st.session_state.mpg_prediction,
-            title={"text": "Miles Per Gallon (MPG)"},
+            title={"text": "KILOMETERS PER LITER (KMPL)"},
             gauge={
                 "axis": {"range": [0, 50]},
                 "bar": {"color": "purple"},
@@ -383,7 +384,7 @@ if st.session_state.mpg_prediction is not None:
     )
     st.plotly_chart(fig)
 
-    st.success(f"✅ Predicted MPG: {st.session_state.mpg_prediction:.2f} MPG")
+    st.success(f"✅ Predicted KMPL: {st.session_state.mpg_prediction:.2f} KMPL")
 
 
 if st.session_state.ai_suggestions:
