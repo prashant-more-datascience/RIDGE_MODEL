@@ -14,7 +14,7 @@ with open("ridgescaler.pkl", "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
 # Hugging Face API Configuration
-HF_API_KEY = "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"  # Replace with your actual Hugging Face API key
+HF_API_KEY = "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"  # Replace with your actual Hugging Face API key
 HF_MODEL = (
     "mistralai/Mistral-7B-Instruct-v0.3"  # Choose a model suitable for text analysis
 )
