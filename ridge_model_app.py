@@ -7,36 +7,35 @@ import plotly.graph_objects as go
 def set_custom_css():
     custom_css = """
     <style>
-        /* Global Font and Darker Background */
         html, body, [class*="st-"] {
             font-family: "Times New Roman", serif;
-            color: #f8f8ff; /* White text for contrast */
-            font-size: 19px !important; /* Decreased from 22px */
-        }
-        .stApp {
-            background-color: #800080 !important; /* Purple Background */
+            color: #f8f8ff;
+            font-size: 19px !important;
         }
 
-        /* Centering the text */
+        .stApp {
+            background-color: #2E0854 !important;
+        }
+
         .center-text {
             text-align: center;
             font-size: 35px;
             font-weight: bold;
-            background: linear-gradient(90deg, #FFD700, #ffcc00, #ff6600, #ff0000); /* Gold to Yellow to Orange to Red Gradient for text */
+            background: linear-gradient(90deg, #00FFFF, #9D00FF, #FF69B4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 20px;
         }
 
-        /* Animated Welcome Message */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0px); }
         }
+
         .welcome-message {
-            font-size: 37px; /* Decreased from 40px */
+            font-size: 37px;
             font-weight: bold;
-            background: linear-gradient(90deg, #FFD700, #ffcc00, #ff6600, #ff0000); /* Gold to Yellow to Orange to Red Gradient */
+            background: linear-gradient(90deg, #00FFFF, #9D00FF, #FF69B4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center;
@@ -44,90 +43,78 @@ def set_custom_css():
             margin-bottom: 20px;
         }
 
-        /* Titles & Headers */
         .stTitle, .stHeader, h1, h2, h3 {
-            font-size: 35px !important; /* Decreased from 38px */
+            font-size: 35px !important;
             font-weight: bold;
-            background: linear-gradient(90deg, #FFD700, #ffcc00, #ff6600, #ff0000); /* Gold to Yellow to Orange to Red Gradient for headers */
+            background: linear-gradient(90deg, #00FFFF, #9D00FF, #FF69B4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent;
         }
 
-        /* 🚀 Input Label Size */
         div[data-testid="stTextInput"] label,  
         div[data-testid="stNumberInput"] label,  
         div[data-testid="stSelectbox"] label,  
         div[data-testid="stSlider"] label {
-            font-size: 29px !important; /* Decreased from 32px */
+            font-size: 29px !important;
             font-weight: bold !important;
-            background: linear-gradient(90deg, #FFD700, #ffcc00, #ff6600); /* Gold to Yellow to Orange Gradient */
+            background: linear-gradient(90deg, #00FFFF, #9D00FF, #FF69B4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
             animation: fadeIn 1.5s ease-in-out, pulse 2s infinite;
         }
 
-        /* Input Field Styling */
         input, textarea, select {
             background-color: #050505 !important;
             color: #f8f8ff !important;
             border: 2px solid #777 !important;
             font-family: "Times New Roman", serif;
-            font-size: 19px !important; /* Decreased from 22px */
+            font-size: 19px !important;
             padding: 10px;
             border-radius: 12px;
             transition: all 0.3s ease-in-out;
         }
 
-        /* Hover Glow Effect */
         input:focus, textarea:focus, select:focus {
-            border-color: #ff6600 !important;
-            box-shadow: 0px 0px 12px rgba(255, 102, 0, 0.8);
+            border-color: #FF69B4 !important;
+            box-shadow: 0px 0px 12px rgba(255, 105, 180, 0.8);
             outline: none;
         }
 
-        /* Gradient Buttons */
         .stButton>button {
-            font-size: 19px !important; /* Decreased from 22px */
+            font-size: 19px !important;
             font-weight: bold;
-            background: linear-gradient(90deg, #FFD700, #ff6600, #ff0000); /* Gold to Orange to Red Gradient for buttons */
+            background: linear-gradient(90deg, #00FFFF, #9D00FF, #FF69B4);
             color: #1a1a1a !important;
             border: none;
             border-radius: 12px;
             padding: 10px 22px;
             transition: 0.3s ease-in-out;
-            box-shadow: 0px 5px 10px rgba(255, 102, 0, 0.4);
+            box-shadow: 0px 5px 10px rgba(157, 0, 255, 0.4);
         }
 
-        /* Button Hover Effect */
         .stButton>button:hover {
-            background: linear-gradient(90deg, #ff6600, #ff0000, #FFD700);
+            background: linear-gradient(90deg, #FF69B4, #9D00FF, #00FFFF);
             box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.6);
             transform: scale(1.07);
         }
 
-        /* Sidebar Styling */
         .stSidebar {
             background-color: #050505 !important;
         }
 
-        /* Modify Gauge Chart Text */
         .gauge-text {
             color: #f8f8ff !important;
-            font-size: 25px !important; /* Decreased from 28px */
+            font-size: 25px !important;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0px); }
-        }
         @keyframes pulse {
-            0% { text-shadow: 0 0 6px #FFD700; }
-            50% { text-shadow: 0 0 20px #ff6600; }
-            100% { text-shadow: 0 0 6px #FFD700; }
+            0% { text-shadow: 0 0 6px #00FFFF; }
+            50% { text-shadow: 0 0 20px #9D00FF; }
+            100% { text-shadow: 0 0 6px #FF69B4; }
         }
+
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0px); }
@@ -180,7 +167,7 @@ cylinders = st.number_input("Cylinders", min_value=0, max_value=12,placeholder="
 st.markdown('</div>', unsafe_allow_html=True)
 
 # ---------------- Predict ----------------
-if st.button("Predict KMPL"):
+if st.button("PREDICT"):
     input_data = np.array([[acceleration, displacement, weight, horsepower, cylinders]])
     input_scaled = scaler.transform(input_data)
     st.session_state.mpg_prediction = ridge_model.predict(input_scaled)[0]
