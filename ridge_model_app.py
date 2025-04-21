@@ -1,18 +1,7 @@
 import streamlit as st
 import pickle
 import numpy as np
-import requests
 import plotly.graph_objects as go
-import plotly.express as px
-import time
-
-
-# Load the trained Ridge model and StandardScaler
-with open("xgb_model.pkl", "rb") as model_file:
-    ridge_model = pickle.load(model_file)
-
-with open("ridgescaler.pkl", "rb") as scaler_file:
-    scaler = pickle.load(scaler_file)
 
 # ---------------- Custom Styling Function ----------------
 def set_custom_css():
@@ -159,40 +148,39 @@ car_image_url = (
 )
 set_bg_from_url(car_image_url)
 
-# Streamlit App Title
-st.write(
-    "Enter vehicle details to predict fuel efficiency (KM/L) and get tips to improve it."
-)
 
-# Input fields
-acceleration = st.number_input("Acceleration (0-100 mph in sec)",placeholder="Acceleration")
+# ---------------- Load Model ----------------
+with open("xgb_model.pkl", "rb") as model_file:
+    ridge_model = pickle.load(model_file)
+with open("ridgescaler.pkl", "rb") as scaler_file:
+    scaler = pickle.load(scaler_file)
+
+# ---------------- Input Form ----------------
+st.markdown('<div class="center-text">Enter vehicle details to predict fuel efficiency (KM/L) .</div>', unsafe_allow_html=True)
+
+acceleration = st.number_input("Acceleration (0-100 mph in sec)", min_value=0,placeholder="Acceleration")
 displacement = st.number_input("Displacement", min_value=0,placeholder="Displacement")
-weight = st.number_input("Weight", min_value=0 , placeholder="Weight")
-horsepower = st.number_input("Horsepower", min_value=0 , placeholder="Horsepower")
-cylinders = st.number_input("Cylinders",min_value=2 , placeholder="Cylinders")
+weight = st.number_input("Weight", min_value=0,placeholder="Weight")
+horsepower = st.number_input("Horsepower", min_value=0,placeholder="Horsepower")
+cylinders = st.number_input("Cylinders", min_value=0, max_value=12,placeholder="Cylinders")
 
+st.markdown('</div>', unsafe_allow_html=True)
 
-# Predict Button
+# ---------------- Predict ----------------
 if st.button("PREDICT"):
-    # Prepare input data
     input_data = np.array([[cylinders,displacement,weight,horsepower,acceleration]])
 
-    # Scale the input data
     input_scaled = scaler.transform(input_data)
-
-    # Make prediction
     st.session_state.mpg_prediction = ridge_model.predict(input_scaled)[0]
 
-
-
-# **Ensure Prediction & AI Suggestions Remain Visible**
-if st.session_state.mpg_prediction is not None:
-    st.subheader("📊 Predicted Fuel Efficiency")
+# ---------------- Output ----------------
+if "mpg_prediction" in st.session_state:
+    st.subheader("\U0001F4CA Predicted Fuel Efficiency")
     fig = go.Figure(
         go.Indicator(
             mode="gauge+number",
             value=st.session_state.mpg_prediction,
-            title={"text": "KILOMETER PER LITER (KM/L)"},
+            title={"text": "KILOMETERS PER LITER (KMPL)"},
             gauge={
                 "axis": {"range": [0, 50]},
                 "bar": {"color": "purple"},
@@ -201,18 +189,17 @@ if st.session_state.mpg_prediction is not None:
                     {"range": [15, 30], "color": "#ffd633"},
                     {"range": [30, 50], "color": "#33cc33"},
                 ],
-                "bgcolor": "rgba(0,0,0,0)",  # Fully transparent background
+                "bgcolor": "rgba(0,0,0,0)",
                 "borderwidth": 2,
                 "bordercolor": "gray",
             },
         )
     )
     fig.update_layout(
-        transition_duration=500,  # Smooth animation effect
-        paper_bgcolor="rgba(0,0,0,0)",  # Transparent background
-        font=dict(color="white"),  # Adjust font color for better visibility
+        transition_duration=500,
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="white"),
         template="plotly_dark",
     )
     st.plotly_chart(fig)
-
-    st.success(f"✅ Predicted KM/L: {st.session_state.mpg_prediction:.2f} KM/L")
+    st.success(f"\u2705 Predicted KM/L: {st.session_state.mpg_prediction:.2f} KM/L")
