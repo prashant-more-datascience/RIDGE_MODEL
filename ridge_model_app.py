@@ -214,4 +214,4 @@ if "mpg_prediction" in st.session_state:
         template="plotly_dark",
     )
     st.plotly_chart(fig)
-    st.success(f"\u2705 Predicted KMPL: {st.session_state.mpg_prediction:.2f} KMPL")
+    st.success(f"\u2705 Predicted KM/L: {st.session_state.mpg_prediction:.2f} KM/L")
