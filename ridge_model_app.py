@@ -5,7 +5,7 @@ import requests
 import plotly.graph_objects as go
 import plotly.express as px
 import time
-from openai import OpenAI
+
 
 # Load the trained Ridge model and StandardScaler
 with open("xgb_model.pkl", "rb") as model_file:
