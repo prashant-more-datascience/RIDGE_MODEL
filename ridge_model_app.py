@@ -127,8 +127,7 @@ def set_custom_css():
 # Apply custom CSS and display welcome message
 set_custom_css()
 
-
-# Set background image with a dark overlay for better visibility
+# Set background image with dark overlay
 def set_bg_from_url(image_url):
     bg_css = f"""
     <style>
@@ -141,13 +140,9 @@ def set_bg_from_url(image_url):
     """
     st.markdown(bg_css, unsafe_allow_html=True)
 
-
-# Set darkened animated background (Replace with your car image URL)
-car_image_url = (
-    "https://i.pinimg.com/736x/13/a6/e7/13a6e7c7214158c4f676084788520266.jpg"
-)
+# Background image
+car_image_url = "https://i.pinimg.com/736x/13/a6/e7/13a6e7c7214158c4f676084788520266.jpg"
 set_bg_from_url(car_image_url)
-
 
 # ---------------- Load Model ----------------
 with open("xgb_model.pkl", "rb") as model_file:
@@ -156,20 +151,19 @@ with open("ridgescaler.pkl", "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
 # ---------------- Input Form ----------------
-st.markdown('<div class="center-text">Enter vehicle details to predict fuel efficiency (KM/L) .</div>', unsafe_allow_html=True)
+st.markdown('<div class="center-text">Enter vehicle details to predict fuel efficiency (KM/L).</div>', unsafe_allow_html=True)
 
-acceleration = st.number_input("Acceleration (0-100 mph in sec)", min_value=0,placeholder="Acceleration")
-displacement = st.number_input("Displacement", min_value=0,placeholder="Displacement")
-weight = st.number_input("Weight", min_value=0,placeholder="Weight")
-horsepower = st.number_input("Horsepower", min_value=0,placeholder="Horsepower")
-cylinders = st.number_input("Cylinders", min_value=0, max_value=12,placeholder="Cylinders")
-
-st.markdown('</div>', unsafe_allow_html=True)
+acceleration = st.number_input("Acceleration (0-100 mph in sec)", min_value=0, placeholder="Acceleration")
+displacement = st.number_input("Displacement", min_value=0, placeholder="Displacement")
+weight = st.number_input("Weight", min_value=0, placeholder="Weight")
+horsepower = st.number_input("Horsepower", min_value=0, placeholder="Horsepower")
+cylinders = st.number_input("Cylinders", min_value=0, max_value=12, placeholder="Cylinders")
 
 # ---------------- Predict ----------------
 if st.button("PREDICT"):
-    input_data = np.array([[cylinders,displacement,weight,horsepower,acceleration]])
-
+   
+    # Combine all inputs including fuel type
+    input_data = np.array([[cylinders, displacement, weight, horsepower, acceleration]])
     input_scaled = scaler.transform(input_data)
     st.session_state.mpg_prediction = ridge_model.predict(input_scaled)[0]
 
